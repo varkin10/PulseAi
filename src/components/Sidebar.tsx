@@ -12,6 +12,7 @@ import {
   Lightbulb,
   MessageSquare,
   Map,
+  Plug,
   Bell,
 } from "lucide-react";
 
@@ -23,6 +24,7 @@ const nav = [
   { label: "Decision hub", href: "/decision-hub", icon: Lightbulb },
   { label: "AI copilot", href: "/copilot", icon: MessageSquare },
   { label: "Roadmap", href: "/roadmap", icon: Map },
+  { label: "Integrations", href: "/integrations", icon: Plug },
   { label: "Alerts", href: "/alerts", icon: Bell },
 ];
 
