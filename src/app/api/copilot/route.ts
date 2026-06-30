@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     const answer = await copilotChat(question, {
       totalFeedback: feedback?.length || 0,
-      themes: themes || [],
+      themes: (themes || []).map((t: any) => ({ name: t.name, mentions: t.mention_count, sentiment: t.sentiment })),
       topIssues,
       revenueAtRisk,
     });
