@@ -85,7 +85,7 @@ export async function copilotChat(
 
 Current data:
 - Total feedback: ${context.totalFeedback}
-- Themes: ${context.themes.map((t) => `${t.name} (${t.mention_count} mentions, ${t.sentiment})`).join(", ")}
+- Themes: ${context.themes.map((t) => `${t.name} (${t.mentions} mentions, ${t.sentiment})`).join(", ")}
 - Top issues: ${context.topIssues.join(", ")}
 - Revenue at risk: $${context.revenueAtRisk}
 
@@ -109,7 +109,7 @@ export async function generateRoadmap(themes: Array<{
   const text = await ask(`Based on these customer feedback themes, generate a prioritized roadmap.
 
 Themes:
-${themes.map((t) => `- ${t.name}: ${t.mention_count} mentions, sentiment: ${t.sentiment}`).join("\n")}
+${themes.map((t) => `- ${t.name}: ${t.mentions} mentions, sentiment: ${t.sentiment}`).join("\n")}
 
 Return ONLY a valid JSON array with no markdown:
 [
