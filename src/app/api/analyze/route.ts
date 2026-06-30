@@ -54,12 +54,12 @@ export async function POST(req: NextRequest) {
         const themeItems = theme.feedback_indices.map((i) => feedbackItems[i]).filter(Boolean);
         const arrAffected = themeItems.reduce((sum, f) => sum + (f.revenue_impact || 0), 0);
         const churnSignals = theme.sentiment === "negative" ? theme.mentions : Math.floor(theme.mentions * 0.3);
-        const tierCounts = themeItems.reduce((acc, f) => {
-          const tier = f.customer_segment || "SMB";
-          acc[tier] = (acc[tier] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
-        const topTier = Object.entries(tierCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "Mixed";
+        const tierCounts: Record<string, number> = {};
+themeItems.forEach((f) => {
+  const tier = f.customer_segment || "SMB";
+  tierCounts[tier] = (tierCounts[tier] || 0) + 1;
+});
+const topTier = Object.entries(tierCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "Mixed";
 
         const result = await generatePriorityScore({
           theme: theme.name,
