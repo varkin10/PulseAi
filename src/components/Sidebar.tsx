@@ -57,7 +57,7 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="p-4 border-t border-gray-100 dark:border-gray-800">
-        <UserButton afterSignOutUrl="/sign-in" />
+        <UserButton />
       </div>
     </aside>
   );
