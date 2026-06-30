@@ -117,7 +117,7 @@ export default function DashboardPage() {
             </div>
 
             <Card>
-              <h2 cssName="text-sm font-medium text-gray-900 dark:text-gray-100 mb-4">Top priority items</h2>
+              <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-4">Top priority items</h2>
               {priorities.map((p) => (
                 <div key={p.id} className="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-semibold shrink-0 ${
