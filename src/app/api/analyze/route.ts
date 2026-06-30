@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
           const tier = f.customer_segment || "SMB";
           acc[tier] = (acc[tier] || 0) + 1;
           return acc;
-        }, {});
+        }, {} as Record<string, number>);
         const topTier = Object.entries(tierCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "Mixed";
 
         const result = await generatePriorityScore({
