@@ -1,5 +1,7 @@
 "use client";
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import {
   Sparkles,
@@ -55,7 +57,18 @@ const pains = [
 ];
 
 export default function Home() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  if (!isLoaded || isSignedIn) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-cream-50 text-gray-900">
@@ -68,29 +81,18 @@ export default function Home() {
             <span className="font-semibold text-gray-900">PulseAI</span>
           </div>
           <div className="flex items-center gap-3">
-            {isSignedIn ? (
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-              >
-                Go to dashboard
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/sign-in"
-                  className="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-2"
-                >
-                  Sign in
-                </Link>
-                <Link
-                  href="/sign-up"
-                  className="inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-                >
-                  Get started free
-                </Link>
-              </>
-            )}
+            <Link
+              href="/sign-in"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-2"
+            >
+              Sign in
+            </Link>
+            <Link
+              href="/sign-up"
+              className="inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            >
+              Get started free
+            </Link>
           </div>
         </div>
       </header>

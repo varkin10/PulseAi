@@ -25,9 +25,9 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     customer_name: "Marcus Webb",
     customer_segment: "Mid-Market",
     feedback_text:
-      "Third week in a row we've had customers report the 'Complete Purchase' button just spins and never completes on mobile Safari. Support ticket volume is up 40% because of this. We're a $340K ARR account and honestly considering pausing our renewal conversation until this is fixed.",
+      "Third week in a row we've had customers report the 'Complete Purchase' button just spins and never completes on mobile Safari. Support ticket volume is up 40% because of this. We're a $46K ARR account and honestly considering pausing our renewal conversation until this is fixed.",
     product_area: "Checkout",
-    revenue_impact: 340000,
+    revenue_impact: 46000,
   },
   {
     source: "support_ticket",
@@ -37,7 +37,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "Our entire finance team (12 seats) got locked out this morning after our Okta SSO integration started throwing 'invalid_grant' errors. This is blocking end-of-quarter reporting due to our board tomorrow. Please treat as P1 — we need someone on a call within the hour.",
     product_area: "Authentication",
-    revenue_impact: 210000,
+    revenue_impact: 198000,
   },
   {
     source: "slack_channel",
@@ -57,7 +57,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "Our weekly ops dashboard used to load in under 5 seconds. For the last two weeks it's been taking 45-90 seconds, and sometimes it times out entirely. Our regional managers are giving up on it during Monday standups, which defeats the purpose of paying for it.",
     product_area: "Reporting",
-    revenue_impact: 62000,
+    revenue_impact: 34000,
   },
   {
     source: "support_ticket",
@@ -77,7 +77,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "The mobile app crashes every single time I try to approve a purchase order from my phone. I'm on the road 3 days a week and this is the primary reason I have the app installed. Right now it's completely unusable for its core purpose. One star until this is fixed.",
     product_area: "Mobile App",
-    revenue_impact: 24000,
+    revenue_impact: 11000,
   },
   {
     source: "in_app",
@@ -97,7 +97,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "We're being asked to move from the Growth to the Enterprise plan for a 60% price increase just to get API access we were told was included when we signed our original contract. This feels like a bait and switch and our procurement team is not going to be happy.",
     product_area: "Billing",
-    revenue_impact: 275000,
+    revenue_impact: 185000,
   },
   {
     source: "email",
@@ -107,7 +107,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "The per-seat pricing model doesn't work for us — we have 200 occasional users who log in once a month and 15 power users, but we're charged the same for all 215. We're actively evaluating a competitor with usage-based pricing because of this.",
     product_area: "Billing",
-    revenue_impact: 88000,
+    revenue_impact: 44000,
   },
   {
     source: "support_ticket",
@@ -157,7 +157,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "Stock counts between the platform and our Shopify store have been out of sync for 4 days — we oversold 60 units of our best-selling SKU because the dashboard showed 200 units in stock when we actually had 12. This directly cost us in refunds and a bad review cycle.",
     product_area: "Inventory",
-    revenue_impact: 71000,
+    revenue_impact: 37000,
   },
   {
     source: "slack_channel",
@@ -167,7 +167,7 @@ const DEMO_FEEDBACK_SEEDS: DemoFeedbackSeed[] = [
     feedback_text:
       "The inventory sync job silently fails about twice a week with no alert or notification to us — we only find out when a warehouse manager notices the numbers don't match a physical count. We need proactive alerting on sync failures, not just a green checkmark that lies to us.",
     product_area: "Inventory",
-    revenue_impact: 54000,
+    revenue_impact: 28000,
   },
   {
     source: "email",
