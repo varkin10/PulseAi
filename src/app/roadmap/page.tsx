@@ -20,23 +20,33 @@ export default function RoadmapPage() {
   const [items, setItems] = useState<RoadmapItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const [error, setError] = useState("");
 
   const generate = async () => {
     if (!user) return;
     setLoading(true);
+    setError("");
     const { data: themes } = await supabase.from("themes").select("*").eq("user_id", user.id);
     if (!themes || themes.length === 0) {
       setLoading(false);
       return;
     }
-    const res = await fetch("/api/roadmap", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ themes }),
-    });
-    const data = await res.json();
-    setItems(data.roadmap || []);
-    setGenerated(true);
+    try {
+      const res = await fetch("/api/roadmap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ themes }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Roadmap generation failed. Please try again.");
+      } else {
+        setItems(data.roadmap || []);
+        setGenerated(true);
+      }
+    } catch {
+      setError("Roadmap generation failed. Please try again.");
+    }
     setLoading(false);
   };
 
@@ -63,6 +73,9 @@ export default function RoadmapPage() {
           </Button>
         </div>
         <div className="p-6">
+          {error && (
+            <div className="bg-red-50 border border-red-100 rounded-lg px-4 py-3 text-sm text-red-800 mb-4">{error}</div>
+          )}
           <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 text-sm text-blue-800 mb-6 flex gap-2">
             <Sparkles size={16} className="text-blue-500 shrink-0 mt-0.5" />
             AI-generated roadmap based on your customer feedback themes.

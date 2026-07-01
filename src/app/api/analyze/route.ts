@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
-import { extractThemes, generatePriorityScore } from "@/lib/ai";
+import { extractThemes, generatePriorityScore, AIHighDemandError } from "@/lib/ai";
 
 export async function POST(req: NextRequest) {
   try {
@@ -113,6 +113,9 @@ const topTier = Object.entries(tierCounts).sort((a, b) => b[1] - a[1])[0]?.[0] |
     });
   } catch (err) {
     console.error("Analysis error:", err);
+    if (err instanceof AIHighDemandError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
     return NextResponse.json({ error: "Analysis failed", detail: String(err) }, { status: 500 });
   }
 }

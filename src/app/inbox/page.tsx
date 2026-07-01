@@ -84,8 +84,12 @@ export default function InboxPage() {
         body: JSON.stringify({ userId: user.id }),
       });
       const data = await res.json();
-      setStatus("Analysis complete — " + data.themes + " themes extracted, " + data.priorities + " items scored");
-      loadFeedback();
+      if (!res.ok) {
+        setStatus(data.error || "Analysis failed. Check your API key.");
+      } else {
+        setStatus("Analysis complete — " + data.themes + " themes extracted, " + data.priorities + " items scored");
+        loadFeedback();
+      }
     } catch {
       setStatus("Analysis failed. Check your API key.");
     }

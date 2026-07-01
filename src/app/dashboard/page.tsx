@@ -1,9 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { supabase, type Feedback, type Theme, type PriorityItem } from "@/lib/supabase";
+import { getDemoFeedback } from "@/lib/demoFeedback";
 import { MetricCard, Card, Badge, InsightCard, Button, sentimentVariant, priorityVariant } from "@/components/ui";
-import { Sparkles, Upload, TrendingUp, AlertCircle, Lightbulb, MessageSquare, DollarSign, Tags } from "lucide-react";
+import { Sparkles, Upload, TrendingUp, AlertCircle, Lightbulb, MessageSquare, DollarSign, Tags, PlayCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -12,20 +13,33 @@ export default function DashboardPage() {
   const [themes, setThemes] = useState<Theme[]>([]);
   const [priorities, setPriorities] = useState<PriorityItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingDemo, setLoadingDemo] = useState(false);
+  const [demoBannerVisible, setDemoBannerVisible] = useState(false);
+
+  const loadDashboardData = useCallback(async (userId: string) => {
+    const [f, t, p] = await Promise.all([
+      supabase.from("feedback").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+      supabase.from("themes").select("*").eq("user_id", userId).order("mention_count", { ascending: false }),
+      supabase.from("priority_items").select("*").eq("user_id", userId).order("score", { ascending: false }).limit(5),
+    ]);
+    setFeedback(f.data || []);
+    setThemes(t.data || []);
+    setPriorities(p.data || []);
+  }, []);
 
   useEffect(() => {
     if (!isLoaded || !user) return;
-    Promise.all([
-      supabase.from("feedback").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-      supabase.from("themes").select("*").eq("user_id", user.id).order("mention_count", { ascending: false }),
-      supabase.from("priority_items").select("*").eq("user_id", user.id).order("score", { ascending: false }).limit(5),
-    ]).then(([f, t, p]) => {
-      setFeedback(f.data || []);
-      setThemes(t.data || []);
-      setPriorities(p.data || []);
-      setLoading(false);
-    });
-  }, [user, isLoaded]);
+    loadDashboardData(user.id).then(() => setLoading(false));
+  }, [user, isLoaded, loadDashboardData]);
+
+  const loadDemoData = async () => {
+    if (!user) return;
+    setLoadingDemo(true);
+    await supabase.from("feedback").insert(getDemoFeedback(user.id));
+    await loadDashboardData(user.id);
+    setDemoBannerVisible(true);
+    setLoadingDemo(false);
+  };
 
   if (!isLoaded || loading) {
     return (
@@ -63,6 +77,11 @@ export default function DashboardPage() {
       </div>
 
       <div className="p-6">
+        {demoBannerVisible && (
+          <div className="mb-4 px-4 py-2 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800">
+            Demo data loaded — click Run AI analysis to see PulseAI in action
+          </div>
+        )}
         {totalFeedback === 0 ? (
           <div className="text-center py-24">
             <div className="w-12 h-12 bg-brand-50 dark:bg-brand-900 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -70,9 +89,14 @@ export default function DashboardPage() {
             </div>
             <h2 className="text-base font-medium text-gray-900 dark:text-gray-100 mb-2">Start by importing feedback</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Upload a CSV, paste text, or add items manually. PulseAI will extract themes and prioritize issues automatically.</p>
-            <Link href="/inbox">
-              <Button variant="primary"><Upload size={14} />Import feedback</Button>
-            </Link>
+            <div className="flex items-center justify-center gap-2">
+              <Link href="/inbox">
+                <Button variant="primary"><Upload size={14} />Import your own feedback</Button>
+              </Link>
+              <Button variant="secondary" onClick={loadDemoData} disabled={loadingDemo}>
+                <PlayCircle size={14} />{loadingDemo ? "Loading demo data..." : "Load demo data"}
+              </Button>
+            </div>
           </div>
         ) : (
           <>

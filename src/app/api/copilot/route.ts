@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
-import { copilotChat } from "@/lib/ai";
+import { copilotChat, AIHighDemandError } from "@/lib/ai";
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,6 +34,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ answer });
   } catch (err) {
     console.error("Copilot error:", err);
+    if (err instanceof AIHighDemandError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
     return NextResponse.json({ error: "Copilot failed" }, { status: 500 });
   }
 }

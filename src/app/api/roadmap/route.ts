@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateRoadmap } from "@/lib/ai";
+import { generateRoadmap, AIHighDemandError } from "@/lib/ai";
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,6 +11,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ roadmap });
   } catch (err) {
     console.error("Roadmap error:", err);
+    if (err instanceof AIHighDemandError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
     return NextResponse.json({ error: "Roadmap generation failed" }, { status: 500 });
   }
 }

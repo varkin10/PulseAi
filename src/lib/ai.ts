@@ -3,9 +3,37 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
+const RETRY_DELAYS_MS = [5000, 15000, 30000];
+
+export class AIHighDemandError extends Error {
+  constructor() {
+    super("AI analysis is experiencing high demand. Please try again in a minute.");
+    this.name = "AIHighDemandError";
+  }
+}
+
+function isRetryableStatus(err: unknown): boolean {
+  const status = (err as { status?: number } | undefined)?.status;
+  return status === 429 || status === 503;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function ask(prompt: string): Promise<string> {
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const result = await model.generateContent(prompt);
+      return result.response.text();
+    } catch (err) {
+      lastErr = err;
+      if (!isRetryableStatus(err) || attempt === RETRY_DELAYS_MS.length) break;
+      await sleep(RETRY_DELAYS_MS[attempt]);
+    }
+  }
+  throw isRetryableStatus(lastErr) ? new AIHighDemandError() : lastErr;
 }
 
 export async function extractThemes(feedbackItems: string[]): Promise<{

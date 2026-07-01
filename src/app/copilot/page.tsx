@@ -33,7 +33,8 @@ export default function CopilotPage() {
         body: JSON.stringify({ userId: user.id, question }),
       });
       const data = await res.json();
-      setMessages((prev) => [...prev, { role: "ai", text: data.answer || "Sorry, I could not get an answer right now." }]);
+      const text = res.ok ? data.answer : data.error;
+      setMessages((prev) => [...prev, { role: "ai", text: text || "Sorry, I could not get an answer right now." }]);
     } catch {
       setMessages((prev) => [...prev, { role: "ai", text: "Something went wrong. Check your API connection." }]);
     }
