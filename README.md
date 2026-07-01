@@ -4,7 +4,7 @@
 
 PulseAI turns scattered customer feedback into a prioritized, revenue-aware product roadmap — automatically.
 
-🔗 **Live app:** [pulse-ai-varun-s-project3.vercel.app](https://pulse-ai-varun-s-project3.vercel.app)
+🔗 **Live app:** [pulseaipm.vercel.app](https://pulseaipm.vercel.app)
 
 ---
 
